@@ -13,3 +13,7 @@ Files are the most problematic.
 [Docker](http://docker.io/) seems like a promising foundation for Linux Desktop.
 
 Progress tracked here: https://github.com/DavidBruant/contained-desktop-apps/projects/1
+
+## Cross-cutting concerns
+
+- Must work on latest stable Ubuntu
