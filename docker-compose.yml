@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  ui:
+    build: ubuntu-ui/.
+    environment:
+      - XDG_RUNTIME_DIR=/tmp
+      - WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+    volumes:
+      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY

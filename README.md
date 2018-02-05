@@ -14,6 +14,16 @@ Files are the most problematic.
 
 Progress tracked here: https://github.com/DavidBruant/contained-desktop-apps/projects/1
 
+## Doc
+
+```sh
+# UI
+docker-compose build
+docker-compose run ui gnome-calculator
+```
+
+
+
 ## Cross-cutting concerns
 
 - Must work on latest stable Ubuntu
