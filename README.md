@@ -16,12 +16,23 @@ Progress tracked here: https://github.com/DavidBruant/contained-desktop-apps/pro
 
 ## Doc
 
+### Container with Wayland user interface
+
 ```sh
-# UI
-docker-compose build
+docker-compose build ui
 docker-compose run ui gnome-calculator
+# The calculator with a UI should show
 ```
 
+### Container that can read/write files as current user
+
+```sh
+docker-compose build as-user
+docker-compose run as-user touch yo.yo
+
+ll
+# the file yo.yo should be created with correct user
+```
 
 
 ## Cross-cutting concerns

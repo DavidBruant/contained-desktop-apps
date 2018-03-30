@@ -8,3 +8,12 @@ services:
       - WAYLAND_DISPLAY=$WAYLAND_DISPLAY
     volumes:
       - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY
+  as-user:
+    image: alpine:latest
+    userns_mode: "host"
+    # second ${USER_ID} is for the group. Using the "user private group"
+    # https://security.ias.edu/how-and-why-user-private-groups-unix
+    user: ${USER_ID}:${USER_ID} 
+    working_dir: /tmp
+    volumes: 
+      - ${PWD}:/tmp
