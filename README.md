@@ -27,12 +27,67 @@ docker-compose run ui gnome-calculator
 ### Container that can read/write files as current user
 
 ```sh
-docker-compose build as-user
 docker-compose run as-user touch yo.yo
 
 ll
 # the file yo.yo should be created with correct user
 ```
+
+### Container with restricted network
+
+#### Container with no network
+
+```sh
+docker-compose run no-net ping google.com
+# ping: bad address 'google.com' 
+# this is because DNS resolution is not possible
+docker-compose run no-net ip n
+# nothing
+```
+
+
+#### One container network-distanced from host
+
+```sh
+ip neighbor
+# Shows which MAC addresses the host can reach
+
+# Exercise the network, then see what MAC addresses are available
+docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor"
+# Shows which MAC addresses the container can reach, which should be different than the host 
+# It should be the docker-compose project's ip
+# The container has then no access to the host neighbor's MAC addresses
+```
+
+
+#### Two containers which are unaware of each other's MAC address and can communicate only through the host
+
+```sh
+# The default bridge is not a good route (pun intended)
+
+# in one console
+docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor && ip addr && sleep infinity"
+# ip addr shows the IP & MAC address of this container
+
+# in another console (same service, different container created)
+docker-compose run defnet bash -c "ping -c 1 <other container IP address> && ip neighbor && sleep infinity"
+# the ip neighbor command shows the MAC address of the other container proving it's within reach
+```
+
+```sh
+# Working example requires different container to be in different bridge networks
+
+# in one console
+docker-compose run own-net-1 bash -c "ping -c 1 google.com && ip neighbor && ip addr && sleep infinity"
+# ip addr shows the IP & MAC address of this container
+# This first call should create the bridge networks
+
+# in another console
+docker-compose run own-net-2 bash -c "ping -c 1 <other container IP address> && ip neighbor && sleep infinity"
+# ping doesn't even work
+```
+
+
 
 
 ## Cross-cutting concerns
