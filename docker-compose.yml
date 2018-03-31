@@ -28,8 +28,10 @@ services:
     network_mode: "none"
 
 ## Default network
-  defnet1:
+  defnet:
     image: adiazmor/docker-ubuntu-with-ping
     # Docker default https://docs.docker.com/network/#network-drivers
     # This leads to all containers from this project to share the same bridge
     # network_mode: "bridge" 
+  
+  

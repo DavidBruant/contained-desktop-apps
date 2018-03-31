@@ -46,17 +46,32 @@ docker-compose run no-net ip n
 ```
 
 
-
+#### One container network-distanced from host
 
 ```sh
 ip neighbor
 # Shows which MAC addresses the host can reach
 
 # Exercise the network, then see what MAC addresses are available
-docker-compose run defnet1 bash -c "ping -c 1 google.com && ip neighbor"
+docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor"
 # Shows which MAC addresses the container can reach, which should be different than the host 
 # It should be the docker-compose project's ip
 # The container has then no access to the host neighbor's MAC addresses
+```
+
+
+#### Two containers which are unaware of each other's MAC address and can communicate only through the host
+
+```sh
+# in one console
+docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor && ip -4 addr && sleep infinity"
+# ip -4 addr shows the IP & MAC address of this container
+
+# in another console
+docker-compose run defnet bash -c "ping -c 1 <other container IP address> && ip neighbor && sleep infinity"
+# the ip neighbor command shows the MAC address of the other container proving it's within reach
+
+# Result : the default bridge doesn't MAC-isolate containers (expected since they share the same bridge)
 ```
 
 
