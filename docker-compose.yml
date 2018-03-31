@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+# UI experiment
   ui:
     build: ubuntu-ui/.
     environment:
@@ -8,6 +9,8 @@ services:
       - WAYLAND_DISPLAY=$WAYLAND_DISPLAY
     volumes:
       - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY
+
+# User permission experiment
   as-user:
     image: alpine:latest
     userns_mode: "host"
@@ -17,3 +20,16 @@ services:
     working_dir: /tmp
     volumes: 
       - ${PWD}:/tmp
+
+# Network tests
+## No network
+  no-net:
+    image: alpine:latest
+    network_mode: "none"
+
+## Default network
+  defnet1:
+    image: adiazmor/docker-ubuntu-with-ping
+    # Docker default https://docs.docker.com/network/#network-drivers
+    # This leads to all containers from this project to share the same bridge
+    # network_mode: "bridge" 

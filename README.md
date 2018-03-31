@@ -27,12 +27,38 @@ docker-compose run ui gnome-calculator
 ### Container that can read/write files as current user
 
 ```sh
-docker-compose build as-user
 docker-compose run as-user touch yo.yo
 
 ll
 # the file yo.yo should be created with correct user
 ```
+
+### Container with restricted network
+
+#### Container with no network
+
+```sh
+docker-compose run no-net ping google.com
+# ping: bad address 'google.com' 
+# this is because DNS resolution is not possible
+docker-compose run no-net ip n
+# nothing
+```
+
+
+
+
+```sh
+ip neighbor
+# Shows which MAC addresses the host can reach
+
+# Exercise the network, then see what MAC addresses are available
+docker-compose run defnet1 bash -c "ping -c 1 google.com && ip neighbor"
+# Shows which MAC addresses the container can reach, which should be different than the host 
+# It should be the docker-compose project's ip
+# The container has then no access to the host neighbor's MAC addresses
+```
+
 
 
 ## Cross-cutting concerns
