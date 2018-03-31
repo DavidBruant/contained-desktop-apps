@@ -34,4 +34,20 @@ services:
     # This leads to all containers from this project to share the same bridge
     # network_mode: "bridge" 
   
+  own-net-1:
+    image: adiazmor/docker-ubuntu-with-ping
+    networks:
+      - ownnet1
+
+  own-net-2:
+    image: adiazmor/docker-ubuntu-with-ping
+    networks:
+      - ownnet2
+
+networks: 
+  ownnet1:
+    driver: bridge
+  ownnet2:
+    driver: bridge
+
   

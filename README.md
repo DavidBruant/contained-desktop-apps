@@ -63,16 +63,30 @@ docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor"
 #### Two containers which are unaware of each other's MAC address and can communicate only through the host
 
 ```sh
-# in one console
-docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor && ip -4 addr && sleep infinity"
-# ip -4 addr shows the IP & MAC address of this container
+# The default bridge is not a good route (pun intended)
 
-# in another console
+# in one console
+docker-compose run defnet bash -c "ping -c 1 google.com && ip neighbor && ip addr && sleep infinity"
+# ip addr shows the IP & MAC address of this container
+
+# in another console (same service, different container created)
 docker-compose run defnet bash -c "ping -c 1 <other container IP address> && ip neighbor && sleep infinity"
 # the ip neighbor command shows the MAC address of the other container proving it's within reach
-
-# Result : the default bridge doesn't MAC-isolate containers (expected since they share the same bridge)
 ```
+
+```sh
+# Working example requires different container to be in different bridge networks
+
+# in one console
+docker-compose run own-net-1 bash -c "ping -c 1 google.com && ip neighbor && ip addr && sleep infinity"
+# ip addr shows the IP & MAC address of this container
+# This first call should create the bridge networks
+
+# in another console
+docker-compose run own-net-2 bash -c "ping -c 1 <other container IP address> && ip neighbor && sleep infinity"
+# ping doesn't even work
+```
+
 
 
 
